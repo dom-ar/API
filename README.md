@@ -6,6 +6,8 @@ A Python based API built with [FastAPI](https://fastapi.tiangolo.com/). It provi
 
 The JSON is provided to OpenAI to generate a summary and other video descriptions of the provided YouTube video based on a custom prompt. The OpenAI response including the summary and other video characteristics are returned by the API in a JSON format.
 
+## Table of contents
+
 ## Project Setup
 - To install the required dependencies, run the following command:
 ```bash
@@ -22,6 +24,49 @@ OPENAI_API_KEY=
 - Pydantic
 - youtube-transcript-api
 - pytubefix
+
+## API Endpoints
+| Method   | URL                                      | Description                              |
+| -------- | ---------------------------------------- | ---------------------------------------- |
+| `GET`    | `/video/available`                             | Returns a boolean showing if the video is able to be loaded.                      |
+| `GET`    | `/video/info`                             | Returns detailed information about a YouTube video in JSON format.                      |
+| `POST`    | `/video/summary`                             | Generates a summary and other characheristics of a YouTube video in JSON format.                      |
+
+*(The error responses are no longer accurate due to YouTube or switching from pytube to pytubefix or both)*
+
+### Check Video Availability
+ `GET` `/video/available` Returns a boolean showing if the video is able to be loaded.
+
+**Parameters:**
+- `videoId` (str): The ID of the YouTube video.
+
+**Response:**
+- `200 OK`: If the video is available. **(Returns true)**
+- `403 Forbidden`: If the video is age restricted, private, region blocked, or members only.
+- `404 Not Found`: If the video is not found or no longer exists, , private, region blocked, or members only.
+- `500 Internal Server Error`: If there is an internal server error.
+
+### Get Video Information
+`GET` `/video/info` Returns detailed information about a YouTube video in JSON format.
+
+**Parameters:**
+- `videoId` (str): The ID of the YouTube video.
+
+**Response:**
+- `200 OK`: Returns a `YoutubeInfo` object containing detailed information about the video.
+- `403 Forbidden`: If the video is age restricted, private, region blocked, or members only.
+- `404 Not Found`: If the video is not found or no longer exists, , private, region blocked, or members only.
+- `500 Internal Server Error`: If there is an internal server error.
+
+### Get Video Summary
+`POST` `/video/summary` Generates a summary and other characheristics of a YouTube video in JSON format.
+
+**Request Body:**
+- `YoutubeInfo` object: The detailed information about the YouTube video in JSON format.
+
+**Response:**
+- `200 OK`: Returns a `YoutubeSummary` object containing the summary and other characteristics of the video.
+- `500 Internal Server Error`: If there is an internal server error.
 
 ## Models  
 ### YoutubeInfo
@@ -60,3 +105,34 @@ Represents the summary and other characteristics of the YouTube video.
 - **summary** (`str`): A concise summary of the video's content.
 - **part** (`List[str]`): A list representing most important moments in the video with time stamps.
 - **visual** (`bool`): A boolean flag indicating if visual context is required to fully understand the video. Would be true for videos like gaming.
+
+## Example
+### **Linus Tech Tips** - [Why Is Everyone Buying This CPU?](https://www.youtube.com/watch?v=Wgjd9uUpaD4 "Why Is Everyone Buying This CPU?")
+---
+**`GET` `/video/available`**
+ 
+ **Parameters:**
+- `videoId` (str): Wgjd9uUpaD4
+
+**Response:**
+- `200 OK`: true
+
+---
+**`GET` `/video/info`**
+
+ **Parameters:**
+- `videoId` (str): Wgjd9uUpaD4
+
+**Response:**
+- `200 OK`:  https://pastebin.com/k5fDxUCF
+
+---
+**`POST` `/video/summary`**
+
+**Request Body:**
+- `YoutubeInfo` object: https://pastebin.com/k5fDxUCF
+
+**Response:**
+- `500 Internal Server Error`: Internal Server Error (Out of credits for OpenAI)
+
+---
