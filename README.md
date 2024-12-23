@@ -6,8 +6,6 @@ A Python based API built with [FastAPI](https://fastapi.tiangolo.com/). It provi
 
 The JSON is provided to OpenAI to generate a summary and other video descriptions of the provided YouTube video based on a custom prompt. The OpenAI response including the summary and other video characteristics are returned by the API in a JSON format.
 
-## Table of contents
-
 ## Project Setup
 - To install the required dependencies, run the following command:
 ```bash
