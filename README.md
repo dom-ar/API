@@ -1,5 +1,6 @@
 ## YouPoint | Youtube AI Summary API
 
+NOTE: This is barely an api
 
 
 A Python based API built with [FastAPI](https://fastapi.tiangolo.com/). It provides API functions to gather information from YouTube videos using [youtube-transcript-api](https://pypi.org/project/youtube-transcript-api/) and [pytubefix](https://pypi.org/project/pytubefix/).  The gathered information is structured into a JSON format, which includes details from title and author to transcript and chapter lists. 
